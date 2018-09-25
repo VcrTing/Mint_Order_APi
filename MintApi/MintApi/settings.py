@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import sys
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+sys.path.insert(0, BASE_DIR)
+sys.path.insert(0, os.path.join(BASE_DIR, 'extra'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -39,7 +42,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 MINT_APPS = [
+    'extra.haystack',
+    # 'djcelery',
 
+    'corsheaders',
+    'django_filters',
+    'rest_framework',
+    'rest_framework.authtoken',
+
+    'appis.user',
+    'appis.trade',
+    'appis.business',
+    'appis.operation',
 ]
 INSTALLED_APPS += MINT_APPS
 
@@ -57,6 +71,7 @@ MINT_MIDDLEWARE = [
 ]
 MIDDLEWARE += MINT_MIDDLEWARE
 
+AUTH_USER_MODEL = 'user.UserProfile'
 ROOT_URLCONF = 'MintApi.urls'
 
 TEMPLATES = [
@@ -86,8 +101,13 @@ WSGI_APPLICATION = 'MintApi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mintapi',
+        'USER': 'root',
+        'PASSWORD': 'ZT123zlt',
+        'HOST': '39.107.96.126',
+        'PORT': '3306',
+        'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB;'}
     }
 }
 
@@ -137,3 +157,46 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
+
+# Site conf
+
+SITE_CONF = {
+    'LIST_PRE_PAGE': 20,
+    'EMPTY_VALUE_DISPLAY': '- 空白 -'
+}
+
+# Cors headers
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Rest framework
+REST_FRAMEWORK = {
+    # 版本控制
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1', 'v2'],
+    'VERSION_PARAM': 'version',
+}
+
+# 认证
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# JWT
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
+
+# Haystack
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'extra.haystack.backends.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'extra', 'whoosh_index'),
+        'INCLUDE_SPELLING': True,
+    },
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'extra.haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 48
