@@ -3,8 +3,18 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework import validators
 
+from . import models
+
 User = get_user_model()
 # Your Serializer
+
+class VertifyCodeSerializer(serializers.ModelSerializer):
+    """
+        用户，验证码
+    """
+    class Meta:
+        model = models.VertifyCode
+        fields = '__all__'
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     """

@@ -25,10 +25,27 @@ from rest_framework.documentation import include_docs_urls
 from . import settings
 from appis.user import views as user_views
 from appis.business import views as business_views
+from appis.operation import views as operation_views
 
 # Router
 # here setting your rest routers
 router = routers.DefaultRouter()
+# business
+router.register('gategory', business_views.GategoryViewSet)
+router.register('shop', business_views.ShopViewSet)
+"""
+router.register('shop_support', business_views.SupportViewSet)
+router.register('shop_activities', business_views.ActivitiesViewSet)
+router.register('shop_license', business_views.ShopLicenseViewSet)
+router.register('shop_delivery_mode', business_views.DeliveryModeViewSet)
+router.register('shop_opening_hours', business_views.OpeningHoursViewSet)
+router.register('shop_identification', business_views.IdentificationViewSet)
+"""
+
+# operation
+router.register('rating', operation_views.RatingsViewSet)
+
+# user
 router.register('users', user_views.UserRegisterViewSet)
 
 urlpatterns = [

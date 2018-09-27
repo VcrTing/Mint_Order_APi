@@ -162,7 +162,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 
 SITE_CONF = {
     'LIST_PRE_PAGE': 20,
-    'EMPTY_VALUE_DISPLAY': '- 空白 -'
+    'EMPTY_VALUE_DISPLAY': '- 空白 -',
+
+    'NEARBY_RATE_LAT': 3,
+    'NEARBY_RATE_LNG': 3,
 }
 
 # Cors headers
@@ -177,6 +180,10 @@ REST_FRAMEWORK = {
     'DEFAULT_VERSION': 'v1',
     'ALLOWED_VERSIONS': ['v1', 'v2'],
     'VERSION_PARAM': 'version',
+    # 过滤控制
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 # 认证
