@@ -1,0 +1,108 @@
+项目接口:
+    1、根据经纬度获取位置详情
+    2、获取食品分类列表
+    3、根据经纬度获取商铺列表
+    4、根据经纬度和关键字搜索商铺列表
+    5、获取一次性验证码
+    6、用户名密码登录
+    7、发送短信验证码
+    8、手机号验证码登录
+    9、根据会话获取用户信息
+    10、用户登出
+
+重要概念:
+    前后台交互
+    API接口
+    接口文档
+    对接口
+    联调
+    前后台分离
+    mock数据
+
+使用到的插件:
+    vue-router
+    axios
+    vuex状态管理
+    better-scroll/vue-scroller 实现页面滑动
+    mint-ui 组件
+    vue-lazyload 图片懒加载
+    mockjs 模拟后台数据
+
+收获:
+    熟悉一个项目的开发流程
+    学会模块化、组件化、工程化的开发模式
+    掌握使用vue-cli脚手架初始化 Vue.js 项目
+    学会模拟 json 后台数据，实现前后端分离
+    学会 ES6+eslint 的开发方式
+    掌握一些项目优化技巧
+
+    学会使用 stylus 编写模块化的 css
+    学会使用 Vue 的过渡编写炫酷的交互界面
+    学会制作图标字体
+    学会解决移动端 1px 边框问题
+    学会移动端经典的 css sticky footer 布局
+    学会 flex 弹性布局
+
+开发前预备:
+    2x和3x图
+    base64编码图片
+    iconfont推荐http://www.iconfont.cn/
+        引用: 推荐使用fontclass方式://at.alicdn.com/t/font_518606_6676bmcalnrhehfr.css
+        <link rel="stylesheet" href="http://at.alicdn.com/t/font_518606_6676bmcalnrhehfr.css"/>
+    引入reset.css样式
+        <link rel="stylesheet" href="./static//css/reset.css"/>
+    添加移动端自适应
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    解决延迟0.3s的问题
+        <script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script>
+        <script>
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+            FastClick.attach(document.body);
+            }, false);
+        }
+        </script>
+
+项目源码目录设计:
+    >src 
+        >api: 与后台交互模块文件夹
+        >common: 通用资源文件夹，如font/img/stylus 
+        >components: 非路由组件文件夹
+        >filters: 自定义过滤器模块文件夹
+        >mock: 模拟数据接口文件
+        >pages: 路由组件文件夹
+        >router: 路由器文件夹
+        >store: vuex相关模块文件夹
+        App.vue 应用组件
+        main.js 入口JS
+
+stylus:
+    npm install stylus stylus-loader --save-dev
+    关系:
+        <style lang="stylus" rel="stylesheet/stylus">
+            app   
+                color: red
+        </style>
+        stylus语法 >> css语法
+        stylus -> stylus-load -> webpack
+    简易教程:
+        结构化: 通过缩进控制，不需要大括号和分号，冒号可选
+            a
+                color rgba(0, 0, 0, 0)
+                height 20px
+        父级引用: 使用字符&指向父级选择器
+            textarea
+            input
+                color #ccc
+                &:hover
+                    color #eee
+        变量: 定义$name = value，使用color $name
+            提高代码复用性
+        混合: 
+            预处器中的函数
+            函数参数可以指定默认值
+            某段css样式要用到多个元素上，只有其中的1，2个样式值有变化
+            提高代码复用性
+        导入:
+            @import 'xxx.css' 导入一个stylus文件
+            @import 'xxx.css. {a}' 导入文件中的 a 样式
