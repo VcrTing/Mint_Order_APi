@@ -24,6 +24,7 @@ from rest_framework.documentation import include_docs_urls
 # here that import you module
 from . import settings
 from appis.user import views as user_views
+from appis.business import views as business_views
 
 # Router
 # here setting your rest routers
@@ -34,10 +35,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('docs/', include_docs_urls(title='Mint外卖')),
     re_path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    re_path(
-        r'^(?P<version>(v1|v2))/',
-        include(router.urls)
-    ),
+    re_path(r'^(?P<version>(v1|v2))/', include(router.urls)),
+
+    #
+    re_path(r'^(?P<version>(v1|v2))/location/(?P<geohash>([\w.,]*))', business_views.LocationView.as_view())
 ]
 
 urlpatterns += static.static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

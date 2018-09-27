@@ -28,7 +28,7 @@ SECRET_KEY = '6stx7u1!*q$i&-&-l4)n0=h%!fw^ct7v0e+_z6b1c^$xl2xpgr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ '*' ]
 
 
 # Application definition
@@ -170,6 +170,7 @@ SITE_CONF = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Rest framework
+
 REST_FRAMEWORK = {
     # 版本控制
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
@@ -179,11 +180,13 @@ REST_FRAMEWORK = {
 }
 
 # 认证
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
 # JWT
+
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
@@ -200,3 +203,8 @@ HAYSTACK_CONNECTIONS = {
 }
 HAYSTACK_SIGNAL_PROCESSOR = 'extra.haystack.signals.RealtimeSignalProcessor'
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 48
+
+# 百度地图 AK
+
+BAIDU_MAP_AK = 'GaNBMrO6tqNBSxuSz0h9Boym69Gm1cWF'
+BAIDU_MAP_LOCATION_URL = 'http://api.map.baidu.com/geocoder/v2/'
