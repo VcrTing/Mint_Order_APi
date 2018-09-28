@@ -47,6 +47,7 @@ router.register('rating', operation_views.RatingsViewSet)
 
 # user
 router.register('users', user_views.UserRegisterViewSet)
+router.register('captcha', user_views.VertifyCodeViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

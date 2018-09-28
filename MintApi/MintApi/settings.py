@@ -166,6 +166,9 @@ SITE_CONF = {
 
     'NEARBY_RATE_LAT': 3,
     'NEARBY_RATE_LNG': 3,
+
+    'CAPTCHE_PATH': os.path.join(BASE_DIR, 'media', 'captcha'),
+    'FONT_PATH': os.path.join(BASE_DIR, 'static', 'font', 'msyh.ttc')
 }
 
 # Cors headers

@@ -12,6 +12,10 @@ class VertifyCodeSerializer(serializers.ModelSerializer):
     """
         用户，验证码
     """
+    result = serializers.CharField(allow_null=True, required=False, write_only=True, help_text='验证码的值，不填')
+    img_content = serializers.CharField(allow_null=True, required=False, help_text='验证码的图片地址，不填')
+    add_time = serializers.DateTimeField(read_only=True)
+
     class Meta:
         model = models.VertifyCode
         fields = '__all__'

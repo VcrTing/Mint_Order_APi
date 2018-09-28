@@ -26,7 +26,7 @@ class VertifyCode(models.Model):
         验证码
     """
     result = models.CharField(max_length=30, verbose_name='验证码的结果')
-    img_content = models.TextField(verbose_name='传入前台的图片配置')
+    img_content = models.ImageField(upload_to='captcha/', verbose_name='传入前台的图片配置')
     phone = models.CharField(max_length=11, verbose_name='电话', help_text='用户电话')
 
     add_time = models.DateTimeField(default=timezone.now, verbose_name='添加时间')
