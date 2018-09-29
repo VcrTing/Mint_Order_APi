@@ -4,9 +4,9 @@ import random
 
 from PIL import Image, ImageDraw, ImageFont
 
-from MintApi.settings import SITE_CONF
+from MintApi.settings import SITE_CONF, BASE_DIR
 
-img_path = SITE_CONF['CAPTCHE_PATH']
+img_path = os.path.join(BASE_DIR, 'media', SITE_CONF['CAPTCHE_DIR_NAME'])
 font_path = SITE_CONF['FONT_PATH']
 
 # My Code
@@ -35,4 +35,4 @@ def get_captcha():
     with open(file_path, "wb") as f:
         img.save(f, format = "jpeg")
 
-    return char_str, file_path
+    return char_str, os.path.join(SITE_CONF['CAPTCHE_DIR_NAME'], str(now)[5:5], str(now)[:20] + '.jpeg')

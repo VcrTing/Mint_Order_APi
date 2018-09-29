@@ -21,7 +21,7 @@ class GategorySerializer(serializers.ModelSerializer):
     link = serializers.URLField(read_only=True)
     class Meta:
         model = models.Gategory
-        fields = ('is_in_serving', 'image_url', 'icon_url', 'description', 'title_color', 'title', 'link', 'v', 'add_time')
+        fields = '__all__'# ('is_in_serving', 'image_url', 'icon_url', 'description', 'title_color', 'title', 'link', 'v', 'add_time')
 
 class ShopLicenseSerializer(serializers.ModelSerializer):
     """
@@ -75,17 +75,12 @@ class ShopSerializer(serializers.ModelSerializer):
     """
         商店
     """
-    supports = SupportsSerializer()
-    license = ShopLicenseSerializer()
-    activities = ActivitesSerializer()
-    delivery_mode = DeliveryModeSerializer()
-    opening_hours = OpeningHoursSerializer()
-    identification = IdentificationSerializer()
 
     location = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Shop
+        depth = 2
         fields = '__all__'
 
     def get_location(self, shop):

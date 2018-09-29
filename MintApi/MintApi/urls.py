@@ -31,8 +31,8 @@ from appis.operation import views as operation_views
 # here setting your rest routers
 router = routers.DefaultRouter()
 # business
-router.register('gategory', business_views.GategoryViewSet)
-router.register('shop', business_views.ShopViewSet)
+router.register('gategorys', business_views.GategoryViewSet)
+router.register('shops', business_views.ShopViewSet)
 """
 router.register('shop_support', business_views.SupportViewSet)
 router.register('shop_activities', business_views.ActivitiesViewSet)

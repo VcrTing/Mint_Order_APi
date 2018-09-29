@@ -79,7 +79,7 @@ class OpeningHours(models.Model):
     add_time = models.DateTimeField(default=timezone.now, verbose_name='添加时间', help_text='添加时间')
 
     class Meta:
-        verbose_name = '活动'
+        verbose_name = '营业时间'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -98,7 +98,7 @@ class Activities(models.Model):
     add_time = models.DateTimeField(default=timezone.now, verbose_name='添加时间', help_text='添加时间')
 
     class Meta:
-        verbose_name = '活动'
+        verbose_name = '店铺活动'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -153,7 +153,7 @@ class Supports(models.Model):
     icon_color = models.CharField(max_length=12, verbose_name='颜色')
     icon_name = models.CharField(max_length=12, verbose_name='icon名称')
     name = models.CharField(max_length=60, verbose_name='名称')
-    _id = models.CharField(max_length=120, verbose_name='保障的id == key')
+    _id = models.CharField(max_length=120, verbose_name='保障的id == key', null=True, blank=True)
 
     add_time = models.DateTimeField(default=timezone.now, verbose_name='添加时间', help_text='添加时间')
 
@@ -197,7 +197,7 @@ class Shop(models.Model):
     identification = models.OneToOneField(to=Identification, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='审核信息')
     delivery_mode = models.OneToOneField(to=DeliveryMode, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='配送方式')
     activities = models.ForeignKey(to=Activities, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='活动')
-    supports = models.ForeignKey(to=Supports, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='保障')
+    supports = models.ManyToManyField(to=Supports, null=True, blank=True, verbose_name='保障', related_name='+')
 
     class Meta:
         verbose_name = '商家'

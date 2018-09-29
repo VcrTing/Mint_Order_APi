@@ -1,7 +1,6 @@
 from django.db.models import Q
 from django.forms import model_to_dict
 from django.http import QueryDict, JsonResponse
-from django.shortcuts import render
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend

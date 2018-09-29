@@ -45,10 +45,10 @@ MINT_APPS = [
     'extra.haystack',
     # 'djcelery',
 
-    'corsheaders',
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 
     'appis.user',
     'appis.trade',
@@ -60,6 +60,9 @@ INSTALLED_APPS += MINT_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -167,7 +170,7 @@ SITE_CONF = {
     'NEARBY_RATE_LAT': 3,
     'NEARBY_RATE_LNG': 3,
 
-    'CAPTCHE_PATH': os.path.join(BASE_DIR, 'media', 'captcha'),
+    'CAPTCHE_DIR_NAME': 'captcha',
     'FONT_PATH': os.path.join(BASE_DIR, 'static', 'font', 'msyh.ttc')
 }
 
