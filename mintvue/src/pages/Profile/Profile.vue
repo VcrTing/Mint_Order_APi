@@ -4,7 +4,7 @@
       <HeaderTop title="我的"></HeaderTop>
       <section class="profile-number">
       <!-- 利用router-link实现到Login组件的跳转 -->
-        <router-link class="profile-link">
+        <router-link class="profile-link" to="/login">
           <div class="profile_image">
             <i class="iconfont icon-yonghuming"></i>
           </div>

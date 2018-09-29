@@ -3,6 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+// import { HTTP, HOST, PORT, VERSION } from '../config'
 
 module.exports = {
   dev: {
@@ -10,7 +11,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': { // 匹配所有以 '/api'开头的请求路径
+        target: 'http://39.107.96.126:80', // 代理目标的基础路径
+        // secure: false,  // 如果是https接口，需要配置这个参数
+        changeOrigin: true, // 支持跨域
+        pathRewrite: { // 重写路径: 去掉路径中开头的'/api'
+          '^/api': ''
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

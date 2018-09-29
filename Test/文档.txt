@@ -1,0 +1,12 @@
+
+首先，你的python3.7环境要先安装 locust
+
+    安装执行脚本
+    pip install locustio
+
+然后
+    cd 到otosaas.py这个目录下，
+    执行下面这段脚本
+    locust -f otosaas.py --host=https://blm.otosaas.com
+
+最后，打开浏览器，访问 localhost:8089

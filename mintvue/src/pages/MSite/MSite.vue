@@ -2,7 +2,7 @@
   <section class="msite">
     <!-- 首页头部title -->
     <!-- 使用 :title 来给头部组件传递数据 -->
-    <HeaderTop title="上海市杨浦区文化名园16栋">
+    <HeaderTop :title="address.name">
       <!-- 要使用slot="left"指定插入的插槽位置 -->
       <router-link class="header_search" slot="left" to="/search">
         <i class="iconfont icon-sousuo"></i>
@@ -19,23 +19,23 @@
     <!--首页导航轮播图-->
     <nav class="msite_nav">
       <!-- swiper的容器div -->
-      <div class="swiper-container">
+      <div class="swiper-container" v-if="categorys.length">
         <!-- swiper的包裹层div -->
         <div class="swiper-wrapper">
           <!-- swiper的轮播div -->
-          <div class="swiper-slide">
-            <a href="javascript:" class="link_to_food">
+          <div class="swiper-slide" v-for="(cs, ix) in categorysArr" :key="ix">
+            <a href="javascript:" class="link_to_food" v-for="(category, index) in cs" :key="index">
               <div class="food_container">
-                <img>
+                <img :src="category.image_url">
               </div>
-              <span></span>
+              <span>{{ category.title }}</span>
             </a>
           </div>
         </div>
         <!-- swiper轮播图圆点 -->
         <div class="swiper-pagination"></div>
       </div>
-      <img src="./images/msite_back.svg" alt="back">
+      <img src="./images/msite_back.svg" alt="back" v-else>
     </nav>
     <!--首页附近商家列表-->
     <div class="msite_shop_list">
@@ -43,29 +43,67 @@
         <i class="iconfont icon-xuanxiang"></i>
         <span class="shop_header_title">附近商家</span>
       </div>
-      <ShopList></ShopList>
+      <ShopList />
     </div>
     </section>
 </template>
 
 <script>
 import Swiper from 'swiper'
+import {mapState} from 'vuex'
+
 import 'swiper/dist/css/swiper.min.css'
 
 import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
 import ShopList from '../../components/ShopList/ShopList.vue'
 
 export default {
+
   components: {
-    HeaderTop
+    HeaderTop,
+    ShopList
   },
-  mounted() {
-    new Swiper('.swiper-container', {
-      loop: true, // 是否循环
-      pagination: {
-        el: '.swiper-pagination'
-      }
-    })
+  computed: {
+    ...mapState(['address', 'categorys']),
+    // 根据 categorys 一维数组生成一个 2 维数组
+    categorysArr () { 
+      const {categorys} = this
+      // 准备一个空的
+      const arr = []
+      let minArr = []
+      // 塞数组
+      categorys.forEach(c => {
+        if (minArr.length === 8) {
+          minArr = []
+        }
+        // 如果 minArr 为空, 将小数组保存到大数组中
+        if (minArr.length === 0) {
+          arr.push(minArr)
+        }
+        minArr.push(c)
+      });
+
+      // 返回
+      return arr
+    }
+  },
+  watch: {
+    // 监视它 是否有数据
+    categorys (new_val) {
+      // 界面更新之后执行的回调函数
+      this.$nextTick(() => {
+        new Swiper('.swiper-container', {
+          loop: true, // 是否循环
+          pagination: {
+            el: '.swiper-pagination'
+          }
+        })
+      })
+    }
+  },
+  async mounted() {
+    this.$store.dispatch('getCategorys')
+    this.$store.dispatch('getShops')
   }
 }
 </script>

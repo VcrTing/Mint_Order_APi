@@ -106,3 +106,16 @@ stylus:
         导入:
             @import 'xxx.css' 导入一个stylus文件
             @import 'xxx.css. {a}' 导入文件中的 a 样式
+
+登录功能:
+    相关效果:
+        切换登录方式
+        手机号合法检测
+        倒计时效果
+        切换显示或隐藏密码
+        前台验证提示
+
+概述:
+    前端使用的Vue技术栈,
+    前后台交互使用ajax,应用s6中的promise对象，工程化使用的是es6的工程模式，为提升效率与兼容性，使用babel
+    转译es6语法，使用stylus-loader转译stylus语法...
