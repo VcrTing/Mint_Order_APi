@@ -52,6 +52,7 @@ MINT_APPS = [
 
     'appis.user',
     'appis.trade',
+    'appis.goods',
     'appis.business',
     'appis.operation',
 ]
@@ -190,11 +191,19 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    # 认证相关
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
 }
 
 # 认证
 
 AUTHENTICATION_BACKENDS = (
+    'appis.user.views.CustomBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -221,3 +230,8 @@ HAYSTACK_SEARCH_RESULTS_PER_PAGE = 48
 
 BAIDU_MAP_AK = 'GaNBMrO6tqNBSxuSz0h9Boym69Gm1cWF'
 BAIDU_MAP_LOCATION_URL = 'http://api.map.baidu.com/geocoder/v2/'
+
+# 云片网 短信验证平台
+
+SMS_API_KEY = '9b11127a9701975c734b8aee81ee3525'
+SMS_WEB_NAME = 'Mint外卖'

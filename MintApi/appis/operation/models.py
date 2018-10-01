@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 from appis.business.models import Shop
@@ -8,15 +9,20 @@ User = get_user_model()
 
 class Ratings(models.Model):
     """
-        评分
+        评价
     """
-    rating = models.FloatField(verbose_name='单个评分')
-    shop = models.ForeignKey(to=Shop, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='商家')
-    user = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='用户')
+    RATE_TYPE = (
+        (0, '满意'),
+        (1, '不满意')
+    )
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='用户')
+    rate_time = models.DateTimeField(default=timezone.now, verbose_name='评价时间')
+    rate_type = models.SmallIntegerField(choices=RATE_TYPE, verbose_name='评价类型')
+    text = models.TextField(verbose_name='评价内容')
 
     class Meta:
-        verbose_name = '评分'
+        verbose_name = '评价'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.rating
+        return self.text

@@ -19,6 +19,7 @@ from django.conf.urls import static, url
 
 from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
+from rest_framework_jwt.views import obtain_jwt_token
 
 # Import
 # here that import you module
@@ -46,14 +47,16 @@ router.register('shop_identification', business_views.IdentificationViewSet)
 router.register('rating', operation_views.RatingsViewSet)
 
 # user
-router.register('users', user_views.UserRegisterViewSet)
+router.register('sms', user_views.SmsCodeViewSet)
 router.register('captcha', user_views.VertifyCodeViewSet)
+router.register('users', user_views.UserRegisterViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('docs/', include_docs_urls(title='Mint外卖')),
     re_path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^(?P<version>(v1|v2))/', include(router.urls)),
+    re_path(r'^login/$', obtain_jwt_token),
 
     #
     re_path(r'^(?P<version>(v1|v2))/location/(?P<geohash>([\w.,]*))', business_views.LocationView.as_view())
