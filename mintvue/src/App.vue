@@ -6,19 +6,24 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 import FooterGuide from './components/FooterGuide/FooterGuide.vue'
 
 export default {
     async mounted () {
-        // this.getAddress() // 
-        this.$store.dispatch('getAddress')
+        this.getAddress() // this.$store.dispatch('getAddress')
+        try {
+            const token = window.localStorage.getItem('token')
+            this.getUserInfo(token)
+        } catch (e) {
+
+        }
     },
     components: {
         FooterGuide
     },
     methods: {
-        // ...mapActions(['getAddress'])
+        ...mapActions(['getAddress', 'getUserInfo'])
     }
 }
 </script>

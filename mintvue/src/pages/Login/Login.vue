@@ -5,8 +5,8 @@
       <div class="login_header">
         <h2 class="login_logo">Mint外卖</h2>
         <div class="login_header_title">
-          <a href="javascript:;" :class="{on: loginWay}" @click="loginWay=true">短信登录</a>
-          <a href="javascript:;" :class="{on: !loginWay}" @click="loginWay=false">密码登录</a>
+          <a href="javascript:;" :class="{on: loginWay}" @click="loginWay=true">登录</a>
+          <a href="javascript:;" :class="{on: !loginWay}" @click="loginWay=false">注册</a>
         </div>
       </div>
       <div class="login_content">
@@ -20,7 +20,7 @@
               </button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码" v-model="vertify_code">
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="sms_code">
             </section>
             <section class="login_hint">
               温馨提示：未注册Mint外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -30,18 +30,17 @@
           <div :class="{on: !loginWay}">
             <section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="手机/邮箱/用户名" v-model="username">
+                <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+                <button class="get_verification" :disabled="!rightPhone"
+                  :class="{right_phone: rightPhone}" @click.prevent="get_code">
+                  {{ computeTime > 0 ? `已发送（${computeTime}s）` : '获取验证码' }}  
+                </button>
               </section>
               <section class="login_verification">
-                <input type="text" maxlength="8" placeholder="密码" v-if="showPwd" v-model="password">
-                <input type="password" maxlength="8" placeholder="密码" v-else v-model="password">
-                <div class="switch_button" :class="showPwd ? 'on' : 'off'" @click="showPwd=!showPwd">
-                  <div class="switch_circle" :class="{right: showPwd}"></div>
-                  <span class="switch_text">{{ showPwd ? 'abc' : '...' }}</span>
-                </div>
+                <input type="tel" maxlength="8" placeholder="短信验证码" v-model="sms_code">
               </section>
               <section class="login_message" v-show="showCaptcha">
-                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha_code">
+                <input type="text" maxlength="11" placeholder="图片验证码" v-model="captcha_code">
                 <img v-if="nowCaptcha" class="get_verification" :src="nowCaptcha" alt="captcha" ref="captcha" @click="get_captcha">
                 <div v-else class="get_verification" @click="get_captcha"></div>
               </section>
@@ -65,7 +64,7 @@ import Axios from 'axios'
 import {MEDIA_DIR} from '../../config'
 
 import AlertTip from '../../components/AlertTip/AlertTip.vue'
-import {reqCaptcha} from '../../api'
+import {reqCaptcha, reqRegister, reqLogin} from '../../api'
 
 export default {
   data () {
@@ -79,7 +78,7 @@ export default {
       username: '', // 后台的用户名
       phone: '', // 电话
       password: '', // 密码
-      vertify_code: '', // 短信验证码
+      sms_code: '', // 短信验证码
       captcha_code: '', // 图片验证码
 
       alertText: '', // 提示文本
@@ -87,19 +86,13 @@ export default {
     }
   },
   watch: {
-    password (new_val) {
-      if (this.username.length >= 2){
-        if (new_val.length >= 4) {
+    sms_code (new_val) {
+      if (this.phone.length >= 2){
+        if (new_val.length > 3) {
           this.showCaptcha = true
         } else {
           this.showCaptcha = false
         }
-      }
-    },
-    username () {
-      // 检测是否存在此用户
-      if (this.password.length >= 4){
-
       }
     },
     showCaptcha (new_val) {
@@ -119,7 +112,7 @@ export default {
   methods: {
     // 获取图片验证码
     get_captcha () {
-      reqCaptcha(this.username)
+      reqCaptcha(this.phone)
         .then( response => {
           const ret = response.data
           if (response.status === '201') {
@@ -151,25 +144,40 @@ export default {
       this.showAlert = true
       this.alertText = alertText
     },
-    // 前台表单验证
-    login () {
-      // 登录方式
-      if (this.loginWay) { // 短信登录
-        const {rightPhone, phone, vertify_code} = this
+    async login () {
+      let result = ''
+      // 登录 or 注册
+      if (this.loginWay) { 
+        const {rightPhone, phone, sms_code} = this
         if (!this.rightPhone) {
           this.show_alert('手机号不正确')
-        } else if (!/^\d{4}$/.test(this.vertify_code)) {
+          return
+        } else if (!/^\d{4}$/.test(this.sms_code)) {
           this.show_alert('手机验证码不正确')
+          return
         }
-      } else { // 密码登录
-        const {username, password, captcha_code} = this
-        if (!this.username) {
+        result = await reqLogin(phone, phone)
+      } else { 
+        const {phone, sms_code, captcha_code} = this
+        if (!this.phone) {
           this.show_alert('必须指定用户名')
-        } else if (!this.password) {
-          this.show_alert('密码必须指定')
+          return
+        } else if (!this.sms_code) {
+          this.show_alert('短信验证码必须指定')
+          return
         } else if (!/^\w{4}$/.test(this.captcha_code)) {
           this.show_alert('验证码必须是 4 位')
+          return
         }
+        result = await reqRegister(phone, phone, sms_code, captcha_code)
+      }
+      // 登录 or 注册 成功后的状态保存
+      const token = result.token
+      console.info
+      if (token) {
+        this.$store.dispatch('recordToken', token)
+        this.$store.dispatch('getUserInfo', token)
+        this.$router.replace('/profile')
       }
     },
     closeTip () {
@@ -178,6 +186,21 @@ export default {
     }
   }
 }
+/*
+<!--
+<section class="login_message">
+  <input type="text" maxlength="11" placeholder="手机/邮箱/用户名" v-model="username">
+</section>
+<section class="login_verification">
+  <input type="text" maxlength="8" placeholder="密码" v-if="showPwd" v-model="password">
+  <input type="password" maxlength="8" placeholder="密码" v-else v-model="password">
+  <div class="switch_button" :class="showPwd ? 'on' : 'off'" @click="showPwd=!showPwd">
+    <div class="switch_circle" :class="{right: showPwd}"></div>
+    <span class="switch_text">{{ showPwd ? 'abc' : '...' }}</span>
+  </div>
+</section>
+-->
+*/
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

@@ -4,21 +4,21 @@
       <HeaderTop title="我的"></HeaderTop>
       <section class="profile-number">
       <!-- 利用router-link实现到Login组件的跳转 -->
-        <router-link class="profile-link" to="/login">
+        <router-link class="profile-link" :to="userInfo.username ? '/userInfo': '/login'">
           <div class="profile_image">
-            <i class="iconfont icon-yonghuming"></i>
+            <i class="iconfont icon-person"></i>
           </div>
           <div class="user-info">
-            <p class="user-info-top"></p>
+            <p class="user-info-top">{{ userInfo.username || '登录/注册' }}</p>
             <p>
               <span class="user-icon">
-                <i class="iconfont icon-msnui-tel icon-mobile"></i>
+                <i class="iconfont icon-shouji icon-mobile"></i>
               </span>
-              <span class="icon-mobile-number"></span>
+              <span class="icon-mobile-number">{{ userInfo.name || '暂无绑定手机号' }}</span>
             </p>
           </div>
           <span class="arrow">
-            <i class="iconfont icon-previewright"></i>
+              <i class="iconfont icon-jiantou1"></i>
           </span>
         </router-link>
       </section>
@@ -47,7 +47,7 @@
           <div class="my_order_div">
             <span>我的订单</span>
             <span class="my_order_icon">
-              <i class="iconfont icon-previewright"></i>
+              <i class="iconfont icon-jiantou1"></i>
             </span>
           </div>
         </a>
@@ -59,7 +59,7 @@
           <div class="my_order_div">
             <span>积分商城</span>
             <span class="my_order_icon">
-              <i class="iconfont icon-previewright"></i>
+              <i class="iconfont icon-jiantou1"></i>
             </span>
           </div>
         </a>
@@ -71,7 +71,7 @@
           <div class="my_order_div">
             <span>Mint外卖会员卡</span>
             <span class="my_order_icon">
-              <i class="iconfont icon-previewright"></i>
+              <i class="iconfont icon-jiantou1"></i>
             </span>
           </div>
         </a>
@@ -80,29 +80,47 @@
         <!-- 服务中心 -->
         <a href="javascript:" class="my_order">
           <span>
-            <i class="iconfont icon-lianxikefu"></i>
+            <i class="iconfont icon-fuwu"></i>
           </span>
           <div class="my_order_div">
             <span>服务中心</span>
             <span class="my_order_icon">
-              <i class="iconfont icon-previewright"></i>
+              <i class="iconfont icon-jiantou1"></i>
             </span>
           </div>
         </a>
       </section>
-      <section class="profile_my_order border-1px">
-        <mt-button type="danger" style="width: 100%">退出登录</mt-button>
+      <section class="profile_my_order border-1px" v-if="userInfo.username">
+        <mt-button type="danger" style="width: 100%" @click="logout">退出登录</mt-button>
       </section>
     </section>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import {MessageBox} from 'mint-ui'
+
 import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
 
 export default {
   components: {
     HeaderTop
+  },
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  methods: {
+    logout () {
+      MessageBox.confirm('确认退出吗？').then(
+        action => {
+          window.localStorage.removeItem('token')
+        },
+        action => {
+          // 取消退出
+        }
+      )
+    }
   }
 }
 </script>

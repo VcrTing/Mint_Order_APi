@@ -7,12 +7,12 @@
       <router-link class="header_search" slot="left" to="/search">
         <i class="iconfont icon-sousuo"></i>
       </router-link>
-      <router-link class="header_login" slot="right" to="/msite">
-        <span class="header_login_text">
+      <router-link class="header_login" slot="right" :to="userInfo.username ? '/msite': '/login'">
+        <span class="header_login_text" v-if="!userInfo.username">
           登录|注册
         </span>
-        <span class="header_login_text">
-          <i class="iconfont icon-yonghuming"></i>
+        <span class="header_login_text" v-else>
+          <i class="iconfont icon-person"></i>
         </span>
       </router-link>
     </HeaderTop>
@@ -41,7 +41,7 @@
     <div class="msite_shop_list">
       <div class="shop_header">
         <i class="iconfont icon-xuanxiang"></i>
-        <span class="shop_header_title">附近商家</span>
+        <span class="shop_header_title">附近商家 {{ this.$store.state.token }}</span>
       </div>
       <ShopList />
     </div>
@@ -64,7 +64,7 @@ export default {
     ShopList
   },
   computed: {
-    ...mapState(['address', 'categorys']),
+    ...mapState(['address', 'categorys', 'userInfo']),
     // 根据 categorys 一维数组生成一个 2 维数组
     categorysArr () { 
       const {categorys} = this

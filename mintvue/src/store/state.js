@@ -7,5 +7,13 @@ export default {
     longitude: 116.36867,
     address: {},
     categorys: [],
-    shops: []
+    shops: [],
+    token: '',
+    userInfo: {}, // 用户信息
+
+    goods: [],
+    ratings: [],
+    info: {},
+
+    cartFoods: [] // 购物车中的
 }
